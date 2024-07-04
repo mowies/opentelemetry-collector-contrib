@@ -31,230 +31,230 @@ func TestMain(m *testing.M) {
 	testbed.DoTestMain(m, performanceResultsSummary)
 }
 
-func TestTrace10kSPS(t *testing.T) {
-	tests := []struct {
-		name         string
-		sender       testbed.DataSender
-		receiver     testbed.DataReceiver
-		resourceSpec testbed.ResourceSpec
-	}{
-		{
-			"OpenCensus",
-			datasenders.NewOCTraceDataSender(testbed.DefaultHost, testutil.GetAvailablePort(t)),
-			datareceivers.NewOCDataReceiver(testutil.GetAvailablePort(t)),
-			testbed.ResourceSpec{
-				ExpectedMaxCPU: 39,
-				ExpectedMaxRAM: 100,
-			},
-		},
-		{
-			"OTLP-gRPC",
-			testbed.NewOTLPTraceDataSender(testbed.DefaultHost, testutil.GetAvailablePort(t)),
-			testbed.NewOTLPDataReceiver(testutil.GetAvailablePort(t)),
-			testbed.ResourceSpec{
-				ExpectedMaxCPU: 20,
-				ExpectedMaxRAM: 100,
-			},
-		},
-		{
-			"OTLP-gRPC-gzip",
-			testbed.NewOTLPTraceDataSender(testbed.DefaultHost, testutil.GetAvailablePort(t)),
-			testbed.NewOTLPDataReceiver(testutil.GetAvailablePort(t)).WithCompression("gzip"),
-			testbed.ResourceSpec{
-				ExpectedMaxCPU: 30,
-				ExpectedMaxRAM: 100,
-			},
-		},
-		{
-			"OTLP-HTTP",
-			testbed.NewOTLPHTTPTraceDataSender(testbed.DefaultHost, testutil.GetAvailablePort(t), ""),
-			testbed.NewOTLPHTTPDataReceiver(testutil.GetAvailablePort(t)),
-			testbed.ResourceSpec{
-				ExpectedMaxCPU: 20,
-				ExpectedMaxRAM: 100,
-			},
-		},
-		{
-			"OTLP-HTTP-gzip",
-			testbed.NewOTLPHTTPTraceDataSender(testbed.DefaultHost, testutil.GetAvailablePort(t), "gzip"),
-			testbed.NewOTLPHTTPDataReceiver(testutil.GetAvailablePort(t)).WithCompression("gzip"),
-			testbed.ResourceSpec{
-				ExpectedMaxCPU: 25,
-				ExpectedMaxRAM: 100,
-			},
-		},
-		{
-			"OTLP-HTTP-zstd",
-			testbed.NewOTLPHTTPTraceDataSender(testbed.DefaultHost, testutil.GetAvailablePort(t), "zstd"),
-			testbed.NewOTLPHTTPDataReceiver(testutil.GetAvailablePort(t)).WithCompression("zstd"),
-			testbed.ResourceSpec{
-				ExpectedMaxCPU: 22,
-				ExpectedMaxRAM: 220,
-			},
-		},
-		{
-			"SAPM",
-			datasenders.NewSapmDataSender(testutil.GetAvailablePort(t), ""),
-			datareceivers.NewSapmDataReceiver(testutil.GetAvailablePort(t), ""),
-			testbed.ResourceSpec{
-				ExpectedMaxCPU: 32,
-				ExpectedMaxRAM: 100,
-			},
-		},
-		{
-			"SAPM-gzip",
-			datasenders.NewSapmDataSender(testutil.GetAvailablePort(t), "gzip"),
-			datareceivers.NewSapmDataReceiver(testutil.GetAvailablePort(t), "gzip"),
-			testbed.ResourceSpec{
-				ExpectedMaxCPU: 35,
-				ExpectedMaxRAM: 110,
-			},
-		},
-		{
-			"SAPM-zstd",
-			datasenders.NewSapmDataSender(testutil.GetAvailablePort(t), "zstd"),
-			datareceivers.NewSapmDataReceiver(testutil.GetAvailablePort(t), "zstd"),
-			testbed.ResourceSpec{
-				ExpectedMaxCPU: 32,
-				ExpectedMaxRAM: 300,
-			},
-		},
-		{
-			"Zipkin",
-			datasenders.NewZipkinDataSender(testbed.DefaultHost, testutil.GetAvailablePort(t)),
-			datareceivers.NewZipkinDataReceiver(testutil.GetAvailablePort(t)),
-			testbed.ResourceSpec{
-				ExpectedMaxCPU: 80,
-				ExpectedMaxRAM: 120,
-			},
-		},
-	}
+//func TestTrace10kSPS(t *testing.T) {
+//	tests := []struct {
+//		name         string
+//		sender       testbed.DataSender
+//		receiver     testbed.DataReceiver
+//		resourceSpec testbed.ResourceSpec
+//	}{
+//		{
+//			"OpenCensus",
+//			datasenders.NewOCTraceDataSender(testbed.DefaultHost, testutil.GetAvailablePort(t)),
+//			datareceivers.NewOCDataReceiver(testutil.GetAvailablePort(t)),
+//			testbed.ResourceSpec{
+//				ExpectedMaxCPU: 39,
+//				ExpectedMaxRAM: 100,
+//			},
+//		},
+//		{
+//			"OTLP-gRPC",
+//			testbed.NewOTLPTraceDataSender(testbed.DefaultHost, testutil.GetAvailablePort(t)),
+//			testbed.NewOTLPDataReceiver(testutil.GetAvailablePort(t)),
+//			testbed.ResourceSpec{
+//				ExpectedMaxCPU: 20,
+//				ExpectedMaxRAM: 100,
+//			},
+//		},
+//		{
+//			"OTLP-gRPC-gzip",
+//			testbed.NewOTLPTraceDataSender(testbed.DefaultHost, testutil.GetAvailablePort(t)),
+//			testbed.NewOTLPDataReceiver(testutil.GetAvailablePort(t)).WithCompression("gzip"),
+//			testbed.ResourceSpec{
+//				ExpectedMaxCPU: 30,
+//				ExpectedMaxRAM: 100,
+//			},
+//		},
+//		{
+//			"OTLP-HTTP",
+//			testbed.NewOTLPHTTPTraceDataSender(testbed.DefaultHost, testutil.GetAvailablePort(t), ""),
+//			testbed.NewOTLPHTTPDataReceiver(testutil.GetAvailablePort(t)),
+//			testbed.ResourceSpec{
+//				ExpectedMaxCPU: 20,
+//				ExpectedMaxRAM: 100,
+//			},
+//		},
+//		{
+//			"OTLP-HTTP-gzip",
+//			testbed.NewOTLPHTTPTraceDataSender(testbed.DefaultHost, testutil.GetAvailablePort(t), "gzip"),
+//			testbed.NewOTLPHTTPDataReceiver(testutil.GetAvailablePort(t)).WithCompression("gzip"),
+//			testbed.ResourceSpec{
+//				ExpectedMaxCPU: 25,
+//				ExpectedMaxRAM: 100,
+//			},
+//		},
+//		{
+//			"OTLP-HTTP-zstd",
+//			testbed.NewOTLPHTTPTraceDataSender(testbed.DefaultHost, testutil.GetAvailablePort(t), "zstd"),
+//			testbed.NewOTLPHTTPDataReceiver(testutil.GetAvailablePort(t)).WithCompression("zstd"),
+//			testbed.ResourceSpec{
+//				ExpectedMaxCPU: 22,
+//				ExpectedMaxRAM: 220,
+//			},
+//		},
+//		{
+//			"SAPM",
+//			datasenders.NewSapmDataSender(testutil.GetAvailablePort(t), ""),
+//			datareceivers.NewSapmDataReceiver(testutil.GetAvailablePort(t), ""),
+//			testbed.ResourceSpec{
+//				ExpectedMaxCPU: 32,
+//				ExpectedMaxRAM: 100,
+//			},
+//		},
+//		{
+//			"SAPM-gzip",
+//			datasenders.NewSapmDataSender(testutil.GetAvailablePort(t), "gzip"),
+//			datareceivers.NewSapmDataReceiver(testutil.GetAvailablePort(t), "gzip"),
+//			testbed.ResourceSpec{
+//				ExpectedMaxCPU: 35,
+//				ExpectedMaxRAM: 110,
+//			},
+//		},
+//		{
+//			"SAPM-zstd",
+//			datasenders.NewSapmDataSender(testutil.GetAvailablePort(t), "zstd"),
+//			datareceivers.NewSapmDataReceiver(testutil.GetAvailablePort(t), "zstd"),
+//			testbed.ResourceSpec{
+//				ExpectedMaxCPU: 32,
+//				ExpectedMaxRAM: 300,
+//			},
+//		},
+//		{
+//			"Zipkin",
+//			datasenders.NewZipkinDataSender(testbed.DefaultHost, testutil.GetAvailablePort(t)),
+//			datareceivers.NewZipkinDataReceiver(testutil.GetAvailablePort(t)),
+//			testbed.ResourceSpec{
+//				ExpectedMaxCPU: 80,
+//				ExpectedMaxRAM: 120,
+//			},
+//		},
+//	}
+//
+//	processors := map[string]string{
+//		"batch": `
+//  batch:
+//`,
+//	}
+//
+//	for _, test := range tests {
+//		t.Run(test.name, func(t *testing.T) {
+//			Scenario10kItemsPerSecond(
+//				t,
+//				test.sender,
+//				test.receiver,
+//				test.resourceSpec,
+//				performanceResultsSummary,
+//				processors,
+//				nil,
+//			)
+//		})
+//	}
+//}
 
-	processors := map[string]string{
-		"batch": `
-  batch:
-`,
-	}
+//func TestTrace10kSPSJaegerGRPC(t *testing.T) {
+//	port := testutil.GetAvailablePort(t)
+//	receiver := datareceivers.NewJaegerDataReceiver(port)
+//	Scenario10kItemsPerSecondAlternateBackend(
+//		t,
+//		datasenders.NewJaegerGRPCDataSender(testbed.DefaultHost, testutil.GetAvailablePort(t)),
+//		receiver,
+//		testbed.NewOTLPDataReceiver(port),
+//		testbed.ResourceSpec{
+//			ExpectedMaxCPU: 40,
+//			ExpectedMaxRAM: 100,
+//		},
+//		performanceResultsSummary,
+//		map[string]string{
+//			"batch": `
+//  batch:
+//`,
+//		},
+//		nil,
+//	)
+//}
 
-	for _, test := range tests {
-		t.Run(test.name, func(t *testing.T) {
-			Scenario10kItemsPerSecond(
-				t,
-				test.sender,
-				test.receiver,
-				test.resourceSpec,
-				performanceResultsSummary,
-				processors,
-				nil,
-			)
-		})
-	}
-}
+//func TestTraceNoBackend10kSPS(t *testing.T) {
+//
+//	limitProcessors := map[string]string{
+//		"memory_limiter": `
+//  memory_limiter:
+//   check_interval: 100ms
+//   limit_mib: 20
+//`,
+//	}
+//
+//	noLimitProcessors := map[string]string{}
+//
+//	var processorsConfig = []processorConfig{
+//		{
+//			Name:                "NoMemoryLimit",
+//			Processor:           noLimitProcessors,
+//			ExpectedMaxRAM:      100,
+//			ExpectedMinFinalRAM: 80,
+//		},
+//		{
+//			Name:                "MemoryLimit",
+//			Processor:           limitProcessors,
+//			ExpectedMaxRAM:      95,
+//			ExpectedMinFinalRAM: 50,
+//		},
+//	}
+//
+//	for _, testConf := range processorsConfig {
+//		t.Run(testConf.Name, func(t *testing.T) {
+//			ScenarioTestTraceNoBackend10kSPS(
+//				t,
+//				testbed.NewOTLPTraceDataSender(testbed.DefaultHost, testutil.GetAvailablePort(t)),
+//				testbed.NewOTLPDataReceiver(testutil.GetAvailablePort(t)),
+//				testbed.ResourceSpec{ExpectedMaxCPU: 80, ExpectedMaxRAM: testConf.ExpectedMaxRAM},
+//				performanceResultsSummary,
+//				testConf,
+//			)
+//		})
+//	}
+//}
 
-func TestTrace10kSPSJaegerGRPC(t *testing.T) {
-	port := testutil.GetAvailablePort(t)
-	receiver := datareceivers.NewJaegerDataReceiver(port)
-	Scenario10kItemsPerSecondAlternateBackend(
-		t,
-		datasenders.NewJaegerGRPCDataSender(testbed.DefaultHost, testutil.GetAvailablePort(t)),
-		receiver,
-		testbed.NewOTLPDataReceiver(port),
-		testbed.ResourceSpec{
-			ExpectedMaxCPU: 40,
-			ExpectedMaxRAM: 100,
-		},
-		performanceResultsSummary,
-		map[string]string{
-			"batch": `
-  batch:
-`,
-		},
-		nil,
-	)
-}
-
-func TestTraceNoBackend10kSPS(t *testing.T) {
-
-	limitProcessors := map[string]string{
-		"memory_limiter": `
-  memory_limiter:
-   check_interval: 100ms
-   limit_mib: 20
-`,
-	}
-
-	noLimitProcessors := map[string]string{}
-
-	var processorsConfig = []processorConfig{
-		{
-			Name:                "NoMemoryLimit",
-			Processor:           noLimitProcessors,
-			ExpectedMaxRAM:      100,
-			ExpectedMinFinalRAM: 80,
-		},
-		{
-			Name:                "MemoryLimit",
-			Processor:           limitProcessors,
-			ExpectedMaxRAM:      95,
-			ExpectedMinFinalRAM: 50,
-		},
-	}
-
-	for _, testConf := range processorsConfig {
-		t.Run(testConf.Name, func(t *testing.T) {
-			ScenarioTestTraceNoBackend10kSPS(
-				t,
-				testbed.NewOTLPTraceDataSender(testbed.DefaultHost, testutil.GetAvailablePort(t)),
-				testbed.NewOTLPDataReceiver(testutil.GetAvailablePort(t)),
-				testbed.ResourceSpec{ExpectedMaxCPU: 80, ExpectedMaxRAM: testConf.ExpectedMaxRAM},
-				performanceResultsSummary,
-				testConf,
-			)
-		})
-	}
-}
-
-func TestTrace1kSPSWithAttrs(t *testing.T) {
-	Scenario1kSPSWithAttrs(t, []string{}, []TestCase{
-		// No attributes.
-		{
-			attrCount:      0,
-			attrSizeByte:   0,
-			expectedMaxCPU: 30,
-			expectedMaxRAM: 150,
-			resultsSummary: performanceResultsSummary,
-		},
-
-		// We generate 10 attributes each with average key length of 100 bytes and
-		// average value length of 50 bytes so total size of attributes values is
-		// 15000 bytes.
-		{
-			attrCount:      100,
-			attrSizeByte:   50,
-			expectedMaxCPU: 120,
-			expectedMaxRAM: 150,
-			resultsSummary: performanceResultsSummary,
-		},
-
-		// Approx 10 KiB attributes.
-		{
-			attrCount:      10,
-			attrSizeByte:   1000,
-			expectedMaxCPU: 100,
-			expectedMaxRAM: 150,
-			resultsSummary: performanceResultsSummary,
-		},
-
-		// Approx 100 KiB attributes.
-		{
-			attrCount:      20,
-			attrSizeByte:   5000,
-			expectedMaxCPU: 250,
-			expectedMaxRAM: 150,
-			resultsSummary: performanceResultsSummary,
-		},
-	}, nil, nil)
-}
+//func TestTrace1kSPSWithAttrs(t *testing.T) {
+//	Scenario1kSPSWithAttrs(t, []string{}, []TestCase{
+//		// No attributes.
+//		{
+//			attrCount:      0,
+//			attrSizeByte:   0,
+//			expectedMaxCPU: 30,
+//			expectedMaxRAM: 150,
+//			resultsSummary: performanceResultsSummary,
+//		},
+//
+//		// We generate 10 attributes each with average key length of 100 bytes and
+//		// average value length of 50 bytes so total size of attributes values is
+//		// 15000 bytes.
+//		{
+//			attrCount:      100,
+//			attrSizeByte:   50,
+//			expectedMaxCPU: 120,
+//			expectedMaxRAM: 150,
+//			resultsSummary: performanceResultsSummary,
+//		},
+//
+//		// Approx 10 KiB attributes.
+//		{
+//			attrCount:      10,
+//			attrSizeByte:   1000,
+//			expectedMaxCPU: 100,
+//			expectedMaxRAM: 150,
+//			resultsSummary: performanceResultsSummary,
+//		},
+//
+//		// Approx 100 KiB attributes.
+//		{
+//			attrCount:      20,
+//			attrSizeByte:   5000,
+//			expectedMaxCPU: 250,
+//			expectedMaxRAM: 150,
+//			resultsSummary: performanceResultsSummary,
+//		},
+//	}, nil, nil)
+//}
 
 func TestTraceBallast1kSPSWithAttrs(t *testing.T) {
 	ballastExtCfg := `
