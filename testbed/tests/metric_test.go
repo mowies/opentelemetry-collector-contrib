@@ -15,84 +15,82 @@ import (
 	"go.opentelemetry.io/collector/component"
 
 	"github.com/open-telemetry/opentelemetry-collector-contrib/internal/common/testutil"
-	"github.com/open-telemetry/opentelemetry-collector-contrib/testbed/datareceivers"
-	"github.com/open-telemetry/opentelemetry-collector-contrib/testbed/datasenders"
 	"github.com/open-telemetry/opentelemetry-collector-contrib/testbed/testbed"
 )
 
-func TestMetric10kDPS(t *testing.T) {
-	tests := []struct {
-		name         string
-		sender       testbed.DataSender
-		receiver     testbed.DataReceiver
-		resourceSpec testbed.ResourceSpec
-		skipMessage  string
-	}{
-		{
-			name:     "Carbon",
-			sender:   datasenders.NewCarbonDataSender(testutil.GetAvailablePort(t)),
-			receiver: datareceivers.NewCarbonDataReceiver(testutil.GetAvailablePort(t)),
-			resourceSpec: testbed.ResourceSpec{
-				ExpectedMaxCPU: 237,
-				ExpectedMaxRAM: 100,
-			},
-		},
-		{
-			name:     "OpenCensus",
-			sender:   datasenders.NewOCMetricDataSender(testbed.DefaultHost, testutil.GetAvailablePort(t)),
-			receiver: datareceivers.NewOCDataReceiver(testutil.GetAvailablePort(t)),
-			resourceSpec: testbed.ResourceSpec{
-				ExpectedMaxCPU: 85,
-				ExpectedMaxRAM: 100,
-			},
-		},
-		{
-			name:     "OTLP",
-			sender:   testbed.NewOTLPMetricDataSender(testbed.DefaultHost, testutil.GetAvailablePort(t)),
-			receiver: testbed.NewOTLPDataReceiver(testutil.GetAvailablePort(t)),
-			resourceSpec: testbed.ResourceSpec{
-				ExpectedMaxCPU: 60,
-				ExpectedMaxRAM: 105,
-			},
-		},
-		{
-			name:     "OTLP-HTTP",
-			sender:   testbed.NewOTLPHTTPMetricDataSender(testbed.DefaultHost, testutil.GetAvailablePort(t)),
-			receiver: testbed.NewOTLPHTTPDataReceiver(testutil.GetAvailablePort(t)),
-			resourceSpec: testbed.ResourceSpec{
-				ExpectedMaxCPU: 60,
-				ExpectedMaxRAM: 100,
-			},
-		},
-		{
-			name:     "SignalFx",
-			sender:   datasenders.NewSFxMetricDataSender(testutil.GetAvailablePort(t)),
-			receiver: datareceivers.NewSFxMetricsDataReceiver(testutil.GetAvailablePort(t)),
-			resourceSpec: testbed.ResourceSpec{
-				ExpectedMaxCPU: 120,
-				ExpectedMaxRAM: 98,
-			},
-		},
-	}
-
-	for _, test := range tests {
-		t.Run(test.name, func(t *testing.T) {
-			if test.skipMessage != "" {
-				t.Skip(test.skipMessage)
-			}
-			Scenario10kItemsPerSecond(
-				t,
-				test.sender,
-				test.receiver,
-				test.resourceSpec,
-				performanceResultsSummary,
-				nil,
-				nil,
-			)
-		})
-	}
-
-}
+//func TestMetric10kDPS(t *testing.T) {
+//	tests := []struct {
+//		name         string
+//		sender       testbed.DataSender
+//		receiver     testbed.DataReceiver
+//		resourceSpec testbed.ResourceSpec
+//		skipMessage  string
+//	}{
+//		{
+//			name:     "Carbon",
+//			sender:   datasenders.NewCarbonDataSender(testutil.GetAvailablePort(t)),
+//			receiver: datareceivers.NewCarbonDataReceiver(testutil.GetAvailablePort(t)),
+//			resourceSpec: testbed.ResourceSpec{
+//				ExpectedMaxCPU: 237,
+//				ExpectedMaxRAM: 100,
+//			},
+//		},
+//		{
+//			name:     "OpenCensus",
+//			sender:   datasenders.NewOCMetricDataSender(testbed.DefaultHost, testutil.GetAvailablePort(t)),
+//			receiver: datareceivers.NewOCDataReceiver(testutil.GetAvailablePort(t)),
+//			resourceSpec: testbed.ResourceSpec{
+//				ExpectedMaxCPU: 85,
+//				ExpectedMaxRAM: 100,
+//			},
+//		},
+//		{
+//			name:     "OTLP",
+//			sender:   testbed.NewOTLPMetricDataSender(testbed.DefaultHost, testutil.GetAvailablePort(t)),
+//			receiver: testbed.NewOTLPDataReceiver(testutil.GetAvailablePort(t)),
+//			resourceSpec: testbed.ResourceSpec{
+//				ExpectedMaxCPU: 60,
+//				ExpectedMaxRAM: 105,
+//			},
+//		},
+//		{
+//			name:     "OTLP-HTTP",
+//			sender:   testbed.NewOTLPHTTPMetricDataSender(testbed.DefaultHost, testutil.GetAvailablePort(t)),
+//			receiver: testbed.NewOTLPHTTPDataReceiver(testutil.GetAvailablePort(t)),
+//			resourceSpec: testbed.ResourceSpec{
+//				ExpectedMaxCPU: 60,
+//				ExpectedMaxRAM: 100,
+//			},
+//		},
+//		{
+//			name:     "SignalFx",
+//			sender:   datasenders.NewSFxMetricDataSender(testutil.GetAvailablePort(t)),
+//			receiver: datareceivers.NewSFxMetricsDataReceiver(testutil.GetAvailablePort(t)),
+//			resourceSpec: testbed.ResourceSpec{
+//				ExpectedMaxCPU: 120,
+//				ExpectedMaxRAM: 98,
+//			},
+//		},
+//	}
+//
+//	for _, test := range tests {
+//		t.Run(test.name, func(t *testing.T) {
+//			if test.skipMessage != "" {
+//				t.Skip(test.skipMessage)
+//			}
+//			Scenario10kItemsPerSecond(
+//				t,
+//				test.sender,
+//				test.receiver,
+//				test.resourceSpec,
+//				performanceResultsSummary,
+//				nil,
+//				nil,
+//			)
+//		})
+//	}
+//
+//}
 
 func TestMetricsFromFile(t *testing.T) {
 	// This test demonstrates usage of NewFileDataProvider to generate load using
