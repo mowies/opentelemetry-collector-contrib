@@ -245,18 +245,23 @@ func (ps *ProviderSender) generateTrace() error {
 	}
 
 	for {
-		err := traceSender.ConsumeTraces(context.Background(), traceData)
-		if err == nil {
+		select {
+		case <-ps.stopSignal:
 			return nil
-		}
+		default:
+			err := traceSender.ConsumeTraces(context.Background(), traceData)
+			if err == nil {
+				return nil
+			}
 
-		if !consumererror.IsPermanent(err) {
-			ps.nonPermanentErrors.Add(uint64(traceData.SpanCount()))
-			continue
-		}
+			if !consumererror.IsPermanent(err) {
+				ps.nonPermanentErrors.Add(uint64(traceData.SpanCount()))
+				continue
+			}
 
-		ps.permanentErrors.Add(uint64(traceData.SpanCount()))
-		return fmt.Errorf("cannot send traces: %w", err)
+			ps.permanentErrors.Add(uint64(traceData.SpanCount()))
+			return fmt.Errorf("cannot send traces: %w", err)
+		}
 	}
 }
 
