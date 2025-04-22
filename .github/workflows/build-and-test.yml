@@ -142,7 +142,7 @@ jobs:
     runs-on: ubuntu-24.04
     env:
       RELEASE_NOTES: release-notes.md
-    if: startsWith(github.ref, 'refs/tags/v') && github.repository == 'open-telemetry/opentelemetry-collector-contrib'
+    if: startsWith(github.ref, 'refs/tags/v') && github.repository == 'mowies/opentelemetry-collector-contrib'
     permissions:
       contents: write
     steps:
